@@ -1,5 +1,5 @@
-#!/usr/bin/env java_launcher
-# vim:ft=java
+#!./java_launcher
+
 
 public class helloworld {
     public static void main(String[] args) {

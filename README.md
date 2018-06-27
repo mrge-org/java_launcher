@@ -4,10 +4,9 @@ Helper script to treat Java programs as scripts.
 
 ## Overview
 
-Put the `java_launcher` script in your path and put the following line at the
-top of an executable Java source program:
+Put the following line at the top of an executable Java source program:
 
-    #!/usr/bin/env java_launcher
+    #!./java_launcher
 
 If you use Vim, add the following line:
 
@@ -28,8 +27,8 @@ need a `.java` extension, but it does need to match the name of the class.
 Put this into a file called `helloworld` and make the file executable. The name
 of the file must match the name of the class.
 
-    #!/usr/bin/env java_launcher
-    # vim:ft=java
+    #!./java_launcher
+
 
     public class helloworld {
         public static void main(String[] args) {

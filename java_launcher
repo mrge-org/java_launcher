@@ -45,7 +45,8 @@ fi
 SOURCE_FILENAME=$(basename "$SOURCE_PATHNAME")
 SOURCE_DIR=$(dirname "$SOURCE_PATHNAME")
 CLASS_NAME=$(echo $SOURCE_FILENAME | sed -e 's/\.*//')
-CACHE_DIR=$HOME/.java_launcher_cache
+#CACHE_DIR=$HOME/.java_launcher_cache
+CACHE_DIR=.java_launcher_cache
 CLASS_DIR=$CACHE_DIR/$SUM
 PROCESSED_SOURCE=$CLASS_DIR/${SOURCE_FILENAME}.java
 PROCESSED_CLASS=$CLASS_DIR/${SOURCE_FILENAME}.class
@@ -71,9 +72,17 @@ else
     sed -e 's/^#.*//' < "$SOURCE_PATHNAME" > "$PROCESSED_SOURCE"
 
     # Compile real source to our cache.
+	echo javac -d "$CLASS_DIR" "$PROCESSED_SOURCE"
     javac -d "$CLASS_DIR" "$PROCESSED_SOURCE"
 fi
 
 # Run the program, passing on arguments from command line.
 export CLASSPATH=$CLASS_DIR:$CLASSPATH
-java -Xmx1024m $CLASS_NAME $*
+echo "SCRIPT_DIR="$SCRIPT_DIR
+echo "CLASS_DIR="$CLASS_DIR
+echo "CLASSPATH="$CLASSPATH
+ls -l
+echo "java -Xmx1024m" $CLASS_NAME $*
+#java -Xmx1024m $CLASS_NAME $*
+java -Xmx1024m -cp $CLASS_DIR $CLASS_NAME $*
+
