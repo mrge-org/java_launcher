@@ -1,0 +1,31 @@
+#!./java_launcher
+
+import io.appium.java_client.windows.WindowsDriver;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import java.net.URL;
+import java.util.concurrent.TimeUnit;
+
+public class proba {
+	
+	private static WindowsDriver pocSession = null;
+	
+    public static void main(String[] args) {
+        System.out.println("TODO: Go!");
+		try {
+		DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setCapability("app", "Microsoft.WindowsCalculator_8wekyb3d8bbwe!App");
+        capabilities.setCapability("platformName", "WINDOWS");
+
+		pocSession = new WindowsDriver(new URL("http://127.0.0.1:4723"), capabilities);
+        pocSession.manage().timeouts().implicitlyWait(16, TimeUnit.SECONDS);
+
+		System.out.println("CalculatorResults " + pocSession.findElementByAccessibilityId("CalculatorResults"));
+		} catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+        
+		}
+    }
+}

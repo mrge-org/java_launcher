@@ -58,7 +58,8 @@ export CLASSPATH=$(awk 'BEGIN { CLASSPATH="" } /^# lib:(.*)$/ { jar = substr($0,
 # Default libraries. Put default ones last.
 SCRIPT_DIR=$(dirname $0)
 LIB_DIR=$SCRIPT_DIR/java_lib
-export CLASSPATH=$CLASSPATH:$LIB_DIR/\*
+#export CLASSPATH=$CLASSPATH:$LIB_DIR/\*
+export CLASSPATH=".\java_lib\java-client-6.0.0.jar:.\java_lib\selenium-api-3.12.0.jar:.\java_lib\selenium-remote-driver-3.12.0.jar:.\java_lib\guava-23.0.jar:.\java_lib\okhttp-3.9.1.jar:.\java_lib\okio-1.13.0.jar:.\java_lib\gson-2.8.4.jar:.\java_lib\commons-lang3-3.7.jar"
 
 # Compile if necessary.
 if [ -f "$PROCESSED_CLASS" ]; then
@@ -72,8 +73,9 @@ else
     sed -e 's/^#.*//' < "$SOURCE_PATHNAME" > "$PROCESSED_SOURCE"
 
     # Compile real source to our cache.
-	echo javac -d "$CLASS_DIR" "$PROCESSED_SOURCE"
-    javac -d "$CLASS_DIR" "$PROCESSED_SOURCE"
+	echo "CLASSPATH="$CLASSPATH
+	echo javac -cp $CLASSPATH -d "$CLASS_DIR" "$PROCESSED_SOURCE"
+		 javac -cp $CLASSPATH -d "$CLASS_DIR" "$PROCESSED_SOURCE"
 fi
 
 # Run the program, passing on arguments from command line.
@@ -82,7 +84,7 @@ echo "SCRIPT_DIR="$SCRIPT_DIR
 echo "CLASS_DIR="$CLASS_DIR
 echo "CLASSPATH="$CLASSPATH
 ls -l
-echo "java -Xmx1024m" $CLASS_NAME $*
+echo java -Xmx1024m -noverify -cp $CLASSPATH $CLASS_NAME $*
 #java -Xmx1024m $CLASS_NAME $*
-java -Xmx1024m -cp $CLASS_DIR $CLASS_NAME $*
+java -Xmx1024m -noverify -cp $CLASSPATH $CLASS_NAME $*
 
