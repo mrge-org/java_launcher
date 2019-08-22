@@ -1,0 +1,75 @@
+#!./java_launcher
+
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Objects;
+import java.util.Scanner;
+
+/** Assumes UTF-8 encoding. JDK 7+. 
+* http://www.javapractices.com/topic/TopicAction.do?Id=87
+* usage: gpetrov@NJ1-QA-90939 MINGW64 /c/src/mrge.org/java_launcher (mingw10)
+*        $ ./mdcon > output2.md
+*/
+public final class mdcon {
+  public static void main(String... args) throws IOException {
+    mdcon parser = new mdcon("input.html");
+    parser.processLineByLine();
+    log("Done.");
+  }
+  
+  /**
+   Constructor.
+   @param fileName full name of an existing, readable file.
+  */
+  public mdcon(String fileName){
+    filePath = Paths.get(fileName);
+  }
+  
+  
+  /** Template method that calls {@link #processLine(String)}.  */
+  public final void processLineByLine() throws IOException {
+    try (Scanner scanner =  new Scanner(filePath, ENCODING.name())){
+      while (scanner.hasNextLine()){
+        processLine(scanner.nextLine());
+      }      
+    }
+  }
+  
+  /** 
+   Overridable method for processing lines in different ways.
+    
+   <P>This simple default implementation expects simple name-value pairs, separated by an 
+   '=' sign. Examples of valid input: 
+   <tt>height = 167cm</tt>
+   <tt>mass =  65kg</tt>
+   <tt>disposition =  "grumpy"</tt>
+   <tt>this is the name = this is the value</tt>
+  */
+  protected void processLine(String line){
+    //use a second Scanner to parse the content of each line 
+	line = line.replace("<p>","");
+	line = line.replace("</p>","\n");
+	line = line.replace("<b>","**");
+	line = line.replace("</b>","**");
+	//line = line.replace("<u>","*");
+	//line = line.replace("</u>","*");
+
+    log(line);
+  }
+  
+  // PRIVATE 
+  private final Path filePath;
+  private final static Charset ENCODING = StandardCharsets.UTF_8;  
+  
+  private static void log(Object object){
+    System.out.println(Objects.toString(object));
+  }
+  
+  private String quote(String text){
+    String QUOTE = "'";
+    return QUOTE + text + QUOTE;
+  }
+} 
